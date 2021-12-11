@@ -1,7 +1,6 @@
 variable "AWS_REGION" {
-  default = "eu-west-1"
+  default = "eu-central-1"
 }
-
 variable "PATH_TO_PRIVATE_KEY" {
   default = "mykey"
 }
@@ -16,9 +15,17 @@ variable "AMIS" {
     us-east-1 = "ami-13be557e"
     us-west-2 = "ami-06b94666"
     eu-west-1 = "ami-844e0bf7"
+    eu-central-1= "ami-0a49b025fffbbdac6"
   }
 }
+
+
 
 variable "RDS_PASSWORD" {
 }
 
+
+variable "MARIADB_VERSION" {
+  default = "10.5.12"
+  
+}

@@ -1,12 +1,12 @@
 resource "aws_db_subnet_group" "mariadb-subnet" {
   name        = "mariadb-subnet"
   description = "RDS subnet group"
-  subnet_ids  = [aws_subnet.main-private-1.id, aws_subnet.main-private-2.id]
+  subnet_ids  = [aws_subnet.myVPC-private-1.id, aws_subnet.myVPC-private-2.id]
 }
 
 resource "aws_db_parameter_group" "mariadb-parameters" {
   name        = "mariadb-parameters"
-  family      = "mariadb10.4"
+  family      = "mariadb10.5"
   description = "MariaDB parameter group"
 
   parameter {
@@ -18,7 +18,7 @@ resource "aws_db_parameter_group" "mariadb-parameters" {
 resource "aws_db_instance" "mariadb" {
   allocated_storage       = 100 # 100 GB of storage, gives us more IOPS than a lower number
   engine                  = "mariadb"
-  engine_version          = "10.4.13"
+  engine_version          = var.MARIADB_VERSION
   instance_class          = "db.t2.small" # use micro if you want to use the free tier
   identifier              = "mariadb"
   name                    = "mariadb"
@@ -30,7 +30,7 @@ resource "aws_db_instance" "mariadb" {
   vpc_security_group_ids  = [aws_security_group.allow-mariadb.id]
   storage_type            = "gp2"
   backup_retention_period = 30                                          # how long you’re going to keep your backups
-  availability_zone       = aws_subnet.main-private-1.availability_zone # prefered AZ
+  availability_zone       = aws_subnet.myVPC-private-1.availability_zone # prefered AZ
   skip_final_snapshot     = true                                        # skip final snapshot when doing terraform destroy
   tags = {
     Name = "mariadb-instance"
