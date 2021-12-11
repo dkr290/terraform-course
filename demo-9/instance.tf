@@ -3,17 +3,17 @@ resource "aws_instance" "example" {
   instance_type = "t2.micro"
 
   # the VPC subnet
-  subnet_id = aws_subnet.main-public-1.id
+  subnet_id = aws_subnet.myvpc-public-1.id
 
   # the security group
-  vpc_security_group_ids = [aws_security_group.allow-ssh.id]
+  vpc_security_group_ids = [aws_security_group.myvpc-allow-ssh.id]
 
   # the public SSH key
   key_name = aws_key_pair.mykeypair.key_name
 }
 
 resource "aws_ebs_volume" "ebs-volume-1" {
-  availability_zone = "eu-west-1a"
+  availability_zone = "eu-central-1a"
   size              = 20
   type              = "gp2"
   tags = {
