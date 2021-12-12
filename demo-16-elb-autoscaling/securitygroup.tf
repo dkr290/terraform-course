@@ -1,7 +1,7 @@
-resource "aws_security_group" "myinstance" {
-  vpc_id      = aws_vpc.main.id
-  name        = "myinstance"
-  description = "security group for my instance"
+resource "aws_security_group" "myvpc-webaccess" {
+  vpc_id      = aws_vpc.myVPC.id
+  name        = "myVPC-WebAccess"
+  description = "security group that allows ssh and all egress traffic"
   egress {
     from_port   = 0
     to_port     = 0
@@ -15,7 +15,7 @@ resource "aws_security_group" "myinstance" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
+  
   ingress {
     from_port       = 80
     to_port         = 80
@@ -24,12 +24,13 @@ resource "aws_security_group" "myinstance" {
   }
 
   tags = {
-    Name = "myinstance"
+    Name = "myVPC-WebAccess"
   }
 }
 
+
 resource "aws_security_group" "elb-securitygroup" {
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = aws_vpc.myVPC.id
   name        = "elb"
   description = "security group for load balancer"
   egress {
@@ -49,4 +50,3 @@ resource "aws_security_group" "elb-securitygroup" {
     Name = "elb"
   }
 }
-
