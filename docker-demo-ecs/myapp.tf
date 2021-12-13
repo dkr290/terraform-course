@@ -3,7 +3,7 @@
 data "template_file" "myapp-task-definition-template" {
   template = file("templates/app.json.tpl")
   vars = {
-    REPOSITORY_URL = replace(aws_ecr_repository.myapp.repository_url, "https://", "")
+    REPOSITORY_URL = replace(data.aws_ecr_repository.myapp.repository_url, "https://", "")
   }
 }
 
@@ -35,7 +35,7 @@ resource "aws_elb" "myapp-elb" {
   connection_draining         = true
   connection_draining_timeout = 400
 
-  subnets         = [aws_subnet.main-public-1.id, aws_subnet.main-public-2.id]
+  subnets         = [aws_subnet.myVPC-public-1.id, aws_subnet.myVPC-public-2.id]
   security_groups = [aws_security_group.myapp-elb-securitygroup.id]
 
   tags = {
@@ -47,7 +47,7 @@ resource "aws_ecs_service" "myapp-service" {
   name            = "myapp"
   cluster         = aws_ecs_cluster.example-cluster.id
   task_definition = aws_ecs_task_definition.myapp-task-definition.arn
-  desired_count   = 1
+  desired_count   = 4
   iam_role        = aws_iam_role.ecs-service-role.arn
   depends_on      = [aws_iam_policy_attachment.ecs-service-attach1]
 
